@@ -1,9 +1,13 @@
 package com.khandhedia.springboot.topic.controller;
 
 import com.khandhedia.springboot.topic.dto.Topic;
-import com.khandhedia.springboot.topic.service.TopicService;
+import com.khandhedia.springboot.topic.service.TopicServiceWithDB;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +19,7 @@ import java.util.List;
 public class TopicController {
 
     @Autowired
-    private TopicService topicService;
+    private TopicServiceWithDB topicService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Topic> getAllTopics() {
@@ -50,5 +54,12 @@ public class TopicController {
     public List<Topic> deleteTopic(@PathVariable("id") String id) {
         return topicService.deleteTopic(id);
     }
+
+    @RequestMapping(value="/inject", method = RequestMethod.POST)
+    public List<Topic> injectSQL(@RequestBody Topic topic)
+    {
+        return topicService.getTopicsByCustomFilter(topic.getDescription());
+    }
+
 
 }
